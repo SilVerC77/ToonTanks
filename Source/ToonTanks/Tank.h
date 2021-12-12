@@ -21,6 +21,14 @@ public:
 	ATank();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		USpringArmComponent* SpringArm;
@@ -35,4 +43,6 @@ private:
 
 	void Move(float _value);
 	void Turn(float _value);
+
+	APlayerController* PlayerControllerRef;
 };
