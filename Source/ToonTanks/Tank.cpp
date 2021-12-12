@@ -18,16 +18,18 @@ ATank::ATank() {
 
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
+
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
 }
 
 // Called when the game starts or when spawned
-void ATank::BeginPlay()
-{
+void ATank::BeginPlay() {
 	Super::BeginPlay();
 
-	PlayerControllerRef = Cast<APlayerController>(GetController());
+	TankPlayerController = Cast<APlayerController>(GetController());
 }
 
 // Called every frame
@@ -35,23 +37,18 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (PlayerControllerRef) {
+	if (TankPlayerController) {
 		FHitResult HitResult;
-		PlayerControllerRef->GetHitResultUnderCursor(
-			ECollisionChannel::ECC_Visibility,
-			false,
-			OUT HitResult);
-
-		DrawDebugSphere(
-			GetWorld(),
-			HitResult.ImpactPoint,
-			25.f,
-			12,
-			FColor::Red,
-			false,
-			-1.f);
+		TankPlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, OUT HitResult);
+		//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 25.f, 12, FColor::Red, false, -1.f);
 		RotateTurret(HitResult.ImpactPoint);
 	}
+}
+
+void ATank::HandleDestruction() {
+	Super::HandleDestruction();
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
 }
 
 void ATank::Move(float _value) {

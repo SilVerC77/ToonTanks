@@ -7,9 +7,10 @@
 #include "BasePawn.generated.h"
 
 class UCapsuleComponent;
+class AProjectile;
 
-	UCLASS()
-	class TOONTANKS_API ABasePawn : public APawn
+UCLASS()
+class TOONTANKS_API ABasePawn : public APawn
 {
 	GENERATED_BODY()
 
@@ -17,8 +18,12 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
 
+	void HandleDestruction();
+
 protected:
 	void RotateTurret(FVector LookAtTarget);
+
+	void Fire();
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -29,4 +34,7 @@ private:
 		UStaticMeshComponent* BaseMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* TurretMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+		TSubclassOf<AProjectile> ProjectileClass;
 };
