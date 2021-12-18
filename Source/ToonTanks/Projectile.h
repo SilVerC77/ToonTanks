@@ -8,6 +8,8 @@
 
 class UStaticMeshComponent;
 class UProjectileMovementComponent;
+class UParticleSystem;
+class UParticleSystemComponent;
 
 UCLASS()
 class TOONTANKS_API AProjectile : public AActor
@@ -27,11 +29,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
 		UStaticMeshComponent* ProjectileMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Movement")
 		UProjectileMovementComponent* ProjectileMovementComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+		UParticleSystem* HitParticles;
+
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
+		UParticleSystemComponent* TrailParticles;
 
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
