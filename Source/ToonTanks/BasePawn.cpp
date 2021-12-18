@@ -5,6 +5,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Projectile.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
 
 
 // Sets default values
@@ -29,6 +31,10 @@ ABasePawn::ABasePawn()
 void ABasePawn::HandleDestruction()
 {
 	//TODO: VIsual/Sound effect
+	if (DeathParticles)
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+	if (DeathSound)
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
 }
 
 void ABasePawn::RotateTurret(FVector LookAtTarget) {
@@ -43,6 +49,6 @@ void ABasePawn::Fire() {
 	//DrawDebugSphere(GetWorld(), Location, 25.f, 12, FColor::Cyan, false, 3.f);
 	FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
 
-	auto Projectile=GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
 	Projectile->SetOwner(this);
 }
