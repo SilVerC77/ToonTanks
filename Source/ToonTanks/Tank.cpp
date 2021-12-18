@@ -14,6 +14,8 @@ ATank::ATank() {
 
 	Camera = CreateDefaultSubobject <UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	bAlive = true;;
 }
 
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -49,6 +51,7 @@ void ATank::HandleDestruction() {
 	Super::HandleDestruction();
 	SetActorHiddenInGame(true);
 	SetActorTickEnabled(false);
+	bAlive = false;
 }
 
 void ATank::Move(float _value) {
